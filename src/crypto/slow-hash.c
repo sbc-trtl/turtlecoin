@@ -19,8 +19,9 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <emmintrin.h>
-#include <wmmintrin.h>
+// #include <emmintrin.h>
+// #include <wmmintrin.h>
+#include "SSE2NEON.h"
 
 #if defined(_MSC_VER)
 #include <intrin.h>
