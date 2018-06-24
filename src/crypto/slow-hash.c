@@ -21,7 +21,7 @@
 
 // #include <emmintrin.h>
 // #include <wmmintrin.h>
-#include "soft-aes.h"
+#include "soft_aes.h"
 
 #if defined(_MSC_VER)
 #include <intrin.h>
