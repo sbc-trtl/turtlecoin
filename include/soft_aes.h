@@ -125,20 +125,14 @@ static inline uint32_t sub_word(uint32_t key)
          saes_sbox[key & 0xff];
 }
 
-#if defined(__clang__) || defined(XMRIG_ARM)
 static inline uint32_t _rotr(uint32_t value, uint32_t amount)
 {
     return (value >> amount) | (value << ((32 - amount) & 31));
 }
-#endif
 
-
-
-template<uint8_t rcon>
-static inline __m128i soft_aeskeygenassist(__m128i key)
+static inline __m128i soft_aeskeygenassist(__m128i key, const int rcon)
 {
     const uint32_t X1 = sub_word(_mm_cvtsi128_si32(_mm_shuffle_epi32(key, 0x55)));
     const uint32_t X3 = sub_word(_mm_cvtsi128_si32(_mm_shuffle_epi32(key, 0xFF)));
     return _mm_set_epi32(_rotr(X3, 8) ^ rcon, X3, _rotr(X1, 8) ^ rcon, X1);
 }
-
