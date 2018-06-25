@@ -209,6 +209,5 @@ void __cpuid(int CPUInfo[4], int InfoType)
 INITIALIZER(detect_aes) {
   int ecx[4];
   cpuid(ecx, 1);
-#endif
   cn_slow_hash_fp = (ecx[2] & (1 << 25)) ? &cn_slow_hash_aesni : &cn_slow_hash_noaesni;
 }
