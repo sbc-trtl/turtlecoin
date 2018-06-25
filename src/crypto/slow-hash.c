@@ -193,10 +193,9 @@ static void (*const extra_hashes[4])(const void *, size_t, char *) =
 #include "slow-hash.inl"
 
 // replace cpuid.h
-void __cpuid(int CPUInfo[4], int InfoType)
+void cpuid(int CPUInfo[4], int InfoType)
 {
-    asm __volatile__
-    (
+    asm volatile (
     "cpuid":
         "=a" (CPUInfo[0]),
         "=b" (CPUInfo[1]),
