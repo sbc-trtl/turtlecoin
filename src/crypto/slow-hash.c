@@ -192,21 +192,23 @@ static void (*const extra_hashes[4])(const void *, size_t, char *) =
 #define AESNI
 #include "slow-hash.inl"
 
-// replace cpuid.h
-void cpuid(int CPUInfo[4], int InfoType)
-{
-    asm volatile (
-    "cpuid":
-        "=a" (CPUInfo[0]),
-        "=b" (CPUInfo[1]),
-        "=c" (CPUInfo[2]),
-        "=d" (CPUInfo[3]) :
-            "a" (InfoType), "c" (0)
-        );
-}
+//replace cpuid.h; but the god damn asm does not work!
+//void cpuid(int CPUInfo[4], int InfoType)
+//{
+//    asm volatile (
+//    "cpuid":
+//        "=a" (CPUInfo[0]),
+//        "=b" (CPUInfo[1]),
+//        "=c" (CPUInfo[2]),
+//        "=d" (CPUInfo[3]) :
+//            "a" (InfoType), "c" (0)
+//        );
+//}
 
 INITIALIZER(detect_aes) {
-  int ecx[4];
-  cpuid(ecx, 1);
-  cn_slow_hash_fp = (ecx[2] & (1 << 25)) ? &cn_slow_hash_aesni : &cn_slow_hash_noaesni;
+  //int ecx[4];
+  //cpuid(ecx, 1);
+  //cn_slow_hash_fp = (ecx[2] & (1 << 25)) ? &cn_slow_hash_aesni : &cn_slow_hash_noaesni;
+    int ecx = -19385853;
+    cn_slow_hash_fp = (ecx & (1 << 25)) ? &cn_slow_hash_aesni : &cn_slow_hash_noaesni;
 }
