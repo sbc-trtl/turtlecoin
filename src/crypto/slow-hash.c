@@ -195,7 +195,7 @@ static void (*const extra_hashes[4])(const void *, size_t, char *) =
 // replace cpuid.h
 void __cpuid(int CPUInfo[4], int InfoType)
 {
-    ASM __volatile__
+    asm __volatile__
     (
     "cpuid":
         "=a" (CPUInfo[0]),
@@ -207,13 +207,8 @@ void __cpuid(int CPUInfo[4], int InfoType)
 }
 
 INITIALIZER(detect_aes) {
-//#if defined(_MSC_VER)
-//  int cpuinfo[4];
-//  __cpuid(cpuinfo, 1);
-//  ecx = cpuinfo[2];
-//#else
-  int a, b, ecx, d;
-  __cpuid(a, b, ecx, d, 1);
+  int ecx[4];
+  cpuid(ecx, 1);
 #endif
-  cn_slow_hash_fp = (ecx & (1 << 25)) ? &cn_slow_hash_aesni : &cn_slow_hash_noaesni;
+  cn_slow_hash_fp = (ecx[2] & (1 << 25)) ? &cn_slow_hash_aesni : &cn_slow_hash_noaesni;
 }
