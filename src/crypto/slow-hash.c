@@ -26,7 +26,7 @@
 #if defined(_MSC_VER)
 #include <intrin.h>
 #else
-#include <cpuid.h>
+//#include <cpuid.h>
 #endif
 
 #include "aesb.h"
@@ -192,13 +192,27 @@ static void (*const extra_hashes[4])(const void *, size_t, char *) =
 #define AESNI
 #include "slow-hash.inl"
 
+// replace cpuid.h
+void cpuid(int CPUInfo[4], int InfoType)
+{
+    ASM __volatile__
+    (
+    "cpuid":
+        "=a" (CPUInfo[0]),
+        "=b" (CPUInfo[1]),
+        "=c" (CPUInfo[2]),
+        "=d" (CPUInfo[3]) :
+            "a" (InfoType), "c" (0)
+        );
+}
+
 INITIALIZER(detect_aes) {
   int ecx;
-#if defined(_MSC_VER)
-  int cpuinfo[4];
-  __cpuid(cpuinfo, 1);
-  ecx = cpuinfo[2];
-#else
+//#if defined(_MSC_VER)
+//  int cpuinfo[4];
+//  __cpuid(cpuinfo, 1);
+//  ecx = cpuinfo[2];
+//#else
   int a, b, d;
   __cpuid(1, a, b, ecx, d);
 #endif
